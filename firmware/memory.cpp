@@ -21,3 +21,11 @@ void Memory::write(uint16_t addr, uint8_t data) {
   /* Write */
   this->m_eeprom->write(addr, data);
 }
+
+void Memory::writeSafe(uint16_t addr, uint8_t data) {
+  /* Read @addr to see if data has been updated */
+  if (this->read(addr) != data) {
+    /* OK to Write */
+    this->write(addr, data);
+  }
+}
