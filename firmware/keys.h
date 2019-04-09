@@ -25,7 +25,9 @@ class Keys {
     void begin();
     void update();
 
+    keystate_t getKey(uint8_t id);
     keystate_t getKey(uint8_t col, uint8_t row);
+    void setKey(uint8_t id, bool light);
     void setKey(uint8_t col, uint8_t row, bool light);
 
 };
