@@ -3,20 +3,37 @@
 #include "input.h"
 #include "keys.h"
 #include "memory.h"
+#include "menu.h"
 #include "midi.h"
 #include "screen.h"
 #include "types.h"
+#include "ui.h"
 
-/* The screen */
+/* The peripherals */
 Screen screen;
-/* The input */
 Input input;
-/* The kbd */
 Keys keys;
-/* The midi port */
 Midi midi(&Serial3);
-/* The memory */
 Memory externalMemory(I2C_EXTERNAL_EEPROM_ADDRESS);
+
+/* The UI */
+UI ui(&screen, &input);
+
+MenuList keymapMenu { 3, (MenuList::Item[])
+  {
+    {"Swap", nullptr},
+    {"Edit", nullptr},
+    {"<BACK>", nullptr}
+  }
+};
+
+MenuList mainMenu { 3, (MenuList::Item[])
+  {
+    {"Keymap", &keymapMenu},
+    {"Memory", nullptr},
+    {"Settings", nullptr}
+  }
+};
 
 void setup() {
   /* Initialize serial comms */
@@ -36,26 +53,25 @@ void setup() {
   /* OK */
   Serial.println("Booted succesfully !");
 
-  screen.write("Key : (0;0)");
+  /* Start UI*/
+  ui.begin(&mainMenu);
+
+  /* Whatever */
   keys.setKey(0, 0, true);
 }
 
 void loop() {
 
-  for (uint8_t x = 0 ; x < 6 ; x++) {
-    for(uint8_t y = 0 ; y < 5 ; y++) {
-      auto keystate = keys.getKey(x, y);
-      if (!keystate.button && keystate.pastButton) {
-        keys.setKey(x, y, !keystate.light);
-        screen.clear();
-        screen.write(String("Key : (") + x + ";" + y + ")");
-      }
-
+  for (uint8_t id = 0 ; id < 30 ; id++) {
+    auto keystate = keys.getKey(id);
+    if (!keystate.button && keystate.pastButton) {
+      keys.setKey(id, !keystate.light);
     }
   }
 
   /* Update input */
   input.update();
   keys.update();
+  ui.update();
 
 }
