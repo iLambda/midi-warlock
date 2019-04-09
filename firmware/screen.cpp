@@ -1,4 +1,5 @@
 #include "screen.h"
+#include "char.h"
 
 Screen::Screen() {
   /* Initialize fields */
@@ -14,6 +15,13 @@ void Screen::begin(){
   this->m_lcd->noDisplay();
   /* Set default params */
   this->setBacklight(0xFF0000);
+
+  /* Add custom chars */
+  this->m_lcd->createChar(0, charmap_up);
+  this->m_lcd->createChar(1, charmap_down);
+  this->m_lcd->createChar(2, charmap_select);
+  this->m_lcd->createChar(3, charmap_selectreverse);
+  
   /* Clear */
   this->m_lcd->clear();
   delay(2500);
@@ -30,6 +38,10 @@ void Screen::write(const char* text) {
 
 void Screen::write(String text) {
   this->m_lcd->print(text.c_str());
+}
+
+void Screen::put(char cara) {
+  this->m_lcd->writeChar(cara);
 }
 
 void Screen::setBacklight(const color_t& color) {
@@ -67,4 +79,8 @@ void Screen::setContrast(uint8_t contrast) {
   this->m_data.contrast = contrast;
   /* Do */
   this->m_lcd->setContrast(contrast);
+}
+
+void Screen::setCursor(uint8_t x, uint8_t y) {
+  this->m_lcd->setCursor(x, y);
 }
