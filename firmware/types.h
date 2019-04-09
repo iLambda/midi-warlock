@@ -146,4 +146,15 @@ inline bool colorEquals(const color_t &a, const color_t &b) {
   return a.r == b.r && a.g == b.g && a.b == b.b;
 }
 
+inline MIDImsg_t midiMake(uint8_t status, uint8_t data1, uint8_t data2) {
+  /* Make msg */
+  MIDImsg_t msg;
+  msg.status = status;
+  msg.data1 = data1;
+  msg.data2 = data2;
+
+  /* Return */
+  return msg;
+}
+
 #endif
