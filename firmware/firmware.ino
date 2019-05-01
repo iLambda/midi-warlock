@@ -18,7 +18,7 @@ Memory externalMemory(I2C_EXTERNAL_EEPROM_ADDRESS);
 
 /* The UI */
 UI ui(&screen, &input);
-
+/* The actual menu */
 MenuList keymapMenu { 3, (MenuList::Item[])
   {
     {"Swap", nullptr},
